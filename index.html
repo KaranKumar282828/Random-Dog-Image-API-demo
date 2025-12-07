@@ -35,38 +35,69 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
         }
+        #breedName {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #444;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
     <h1>Random Dog Image API Demo</h1>
     <p>Click the button below to get a new random dog image!</p>
+
     <button id="fetchBtn">Fetch Dog Image</button>
+
+    <!-- Breed Name Display -->
+    <h2 id="breedName"></h2>
+
     <div>
         <img id="dogImage" src="" alt="Random Dog Image" />
     </div>
 
     <script>
-        const button = document.getElementById('fetchBtn');
-        const dogImage = document.getElementById('dogImage');
+    const button = document.getElementById('fetchBtn');
+    const dogImage = document.getElementById('dogImage');
+    const breedName = document.getElementById('breedName');
 
-        button.addEventListener('click', () => {
-            fetch('https://dog.ceo/api/breeds/image/random')
-                .then(res => res.json())
-                .then(data => {
-                    dogImage.src = data.message;
-                })
-                .catch(err => {
-                    console.error("Error fetching image:", err);
-                    alert("Failed to fetch image. Try again!");
-                });
-        });
+    async function fetchDog() {
+        try {
+            // Fetch response
+            const res = await fetch('https://dog.ceo/api/breeds/image/random');
+            const data = await res.json();
 
-        // Fetch one dog image on page load
-        fetch('https://dog.ceo/api/breeds/image/random')
-            .then(res => res.json())
-            .then(data => dogImage.src = data.message);
-    </script>
+            const imageUrl = data.message;
+
+            // First update the image
+            dogImage.src = imageUrl;
+
+            // Extract breed name
+            const parts = imageUrl.split('/');
+            const breed = parts[parts.indexOf('breeds') + 1];
+
+            // Format breed name
+            const formattedBreed = breed
+                .replace(/-/g, ' ')
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+
+            breedName.innerText = "Breed: " + formattedBreed;
+
+        } catch (err) {
+            console.error("Error fetching image:", err);
+            alert("Failed to fetch image. Try again!");
+        }
+    }
+
+    button.addEventListener('click', fetchDog);
+
+    // Fetch once on load
+    fetchDog();
+</script>
+
 
 </body>
 </html>
