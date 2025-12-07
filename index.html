@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Dog Image API Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff4757;
+        }
+        img {
+            margin-top: 30px;
+            max-width: 90%;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Random Dog Image API Demo</h1>
+    <p>Click the button below to get a new random dog image!</p>
+    <button id="fetchBtn">Fetch Dog Image</button>
+    <div>
+        <img id="dogImage" src="" alt="Random Dog Image" />
+    </div>
+
+    <script>
+        const button = document.getElementById('fetchBtn');
+        const dogImage = document.getElementById('dogImage');
+
+        button.addEventListener('click', () => {
+            fetch('https://dog.ceo/api/breeds/image/random')
+                .then(res => res.json())
+                .then(data => {
+                    dogImage.src = data.message;
+                })
+                .catch(err => {
+                    console.error("Error fetching image:", err);
+                    alert("Failed to fetch image. Try again!");
+                });
+        });
+
+        // Fetch one dog image on page load
+        fetch('https://dog.ceo/api/breeds/image/random')
+            .then(res => res.json())
+            .then(data => dogImage.src = data.message);
+    </script>
+
+</body>
+</html>
