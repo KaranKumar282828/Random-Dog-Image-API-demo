@@ -1,1 +1,0 @@
-# Random-Dog-Image-API-demo
